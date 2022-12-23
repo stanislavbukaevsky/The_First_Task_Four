@@ -65,4 +65,8 @@ public class StudentService {
     public List<ListOfStudentsLimit> getLastStudentsById() {
         return studentRepository.getLastStudentsById();
     }
+
+    public List<Student> getStudentsByName(String name) {
+        return studentRepository.getStudentsByName(name);
+    }
 }

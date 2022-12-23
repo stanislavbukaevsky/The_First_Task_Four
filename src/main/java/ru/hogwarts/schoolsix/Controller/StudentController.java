@@ -96,4 +96,10 @@ public class StudentController {
     public ResponseEntity<List<ListOfStudentsLimit>> getLastStudentsById() {
         return ResponseEntity.ok(studentService.getLastStudentsById());
     }
+
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Student>> getStudentsByName(@PathVariable("name") String name) {
+        List<Student> students = studentService.getStudentsByName(name);
+        return ResponseEntity.ok(students);
+    }
 }
