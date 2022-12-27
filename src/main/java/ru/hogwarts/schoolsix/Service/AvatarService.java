@@ -1,5 +1,7 @@
 package ru.hogwarts.schoolsix.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ public class AvatarService {
     private final StudentService studentService;
     private final AvatarRepository avatarRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     public AvatarService(StudentRepository studentRepository, StudentService studentService, AvatarRepository avatarRepository) {
         this.studentRepository = studentRepository;
         this.studentService = studentService;
@@ -36,6 +40,7 @@ public class AvatarService {
     }
 
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+        logger.debug("Вызван метод uploadAvatar (studentId = {})", studentId);
         Student student = studentService.findStudent(studentId);
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtensions(avatarFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -60,6 +65,7 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(Long avatarId) {
+        logger.debug("Вызван метод findAvatar (avatarId = {})", avatarId);
         return avatarRepository.findByStudentId(avatarId).orElseThrow();
     }
 
@@ -86,6 +92,7 @@ public class AvatarService {
     }
 
     public Collection<Avatar> getPaginationAvatar(int pageNumber, int pageSize) {
+        logger.debug("Вызван метод getPaginationAvatar (pageNumber = {}, pageSize = {})", pageNumber, pageSize);
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
