@@ -11,12 +11,13 @@ import ru.hogwarts.schoolsix.Repositories.StudentRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(FacultyService.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -83,5 +84,22 @@ public class StudentService {
     public List<Student> getStudentsByName(String name) {
         logger.debug("Вызван метод getStudentsByName (name = {})", name);
         return studentRepository.getStudentsByName(name);
+    }
+
+    public Collection<String> getFilteredByName() {
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(student -> student.startsWith("А"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public Double getAllStudentsAvgAge() {
+        return studentRepository.findAll()
+                .stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
     }
 }

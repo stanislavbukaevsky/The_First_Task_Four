@@ -73,4 +73,13 @@ public class FacultyController {
         }
         return ResponseEntity.ok(facultyService.listOfStudentsOfTheFaculty(id));
     }
+
+    @GetMapping("/faculty-name-max-length")
+    public ResponseEntity<String> getFacultyNameWithMaxLength() {
+        String nameMaxLength = facultyService.getFacultyNameWithMaxLength();
+        if (nameMaxLength.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(nameMaxLength);
+    }
 }

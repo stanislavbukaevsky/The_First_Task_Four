@@ -102,4 +102,18 @@ public class StudentController {
         List<Student> students = studentService.getStudentsByName(name);
         return ResponseEntity.ok(students);
     }
+
+    @GetMapping("/filtered-by-name")
+    public ResponseEntity<Collection<String>> getFilteredByName() {
+        Collection<String> allStudentsByName = studentService.getFilteredByName();
+        if (allStudentsByName.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(allStudentsByName);
+    }
+
+    @GetMapping("/average-age-students")
+    public Double getAllStudentsAvgAge() {
+        return studentService.getAllStudentsAvgAge();
+    }
 }

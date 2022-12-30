@@ -8,9 +8,7 @@ import ru.hogwarts.schoolsix.Model.Student;
 import ru.hogwarts.schoolsix.Repositories.FacultyRepository;
 import ru.hogwarts.schoolsix.Repositories.StudentRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class FacultyService {
@@ -69,5 +67,15 @@ public class FacultyService {
         logger.debug("Вызван метод listOfStudentsOfTheFaculty (id = {})", id);
         Faculty faculty = findFaculty(id);
         return studentRepository.findByFacultiesId(faculty.getId());
+    }
+
+    public String getFacultyNameWithMaxLength() {
+        logger.info("Вызван метод getFacultyNameWithMaxLength");
+        Optional<String> maxFacultyName = facultyRepository
+                .findAll()
+                .stream()
+                .map(Faculty::getName)
+                .max(Comparator.comparing(String::length));
+        return maxFacultyName.get();
     }
 }
