@@ -116,4 +116,14 @@ public class StudentController {
     public Double getAllStudentsAvgAge() {
         return studentService.getAllStudentsAvgAge();
     }
+
+    @GetMapping("/names-students-parallel")
+    public void listOfAllStudentsInParallelStream() {
+        studentService.listOfAllStudentsInParallelStream();
+    }
+
+    @GetMapping("/names-students-synchroniz")
+    public void listOfAllStudentsViaSynchronization() {
+        studentService.listOfAllStudentsViaSynchronization();
+    }
 }

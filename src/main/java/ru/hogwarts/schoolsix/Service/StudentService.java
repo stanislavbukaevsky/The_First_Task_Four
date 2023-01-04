@@ -19,6 +19,10 @@ public class StudentService {
 
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
+    private Integer count = 0;
+
+    private Object flag = new Object();
+
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
@@ -101,5 +105,54 @@ public class StudentService {
                 .mapToInt(Student::getAge)
                 .average()
                 .orElse(0);
+    }
+
+    public void listOfAllStudentsInParallelStream() {
+        List<String> namesStudents = studentRepository.findAll().stream()
+                .map(user -> user.getName())
+                .collect(Collectors.toList());
+
+        printToConsoleInParallelStream(namesStudents.get(0));
+        printToConsoleInParallelStream(namesStudents.get(1));
+
+        new Thread(() -> {
+            printToConsoleInParallelStream(namesStudents.get(2));
+            printToConsoleInParallelStream(namesStudents.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printToConsoleInParallelStream(namesStudents.get(4));
+            printToConsoleInParallelStream(namesStudents.get(5));
+        }).start();
+    }
+
+    private void printToConsoleInParallelStream(String names) {
+        System.out.println("Студент с именем " + names);
+    }
+
+    public void listOfAllStudentsViaSynchronization() {
+        List<String> namesStudents = studentRepository.findAll().stream()
+                .map(user -> user.getName())
+                .collect(Collectors.toList());
+
+        printToConsoleViaSynchronization(namesStudents.get(0));
+        printToConsoleViaSynchronization(namesStudents.get(1));
+
+        new Thread(() -> {
+            printToConsoleViaSynchronization(namesStudents.get(2));
+            printToConsoleViaSynchronization(namesStudents.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printToConsoleViaSynchronization(namesStudents.get(4));
+            printToConsoleViaSynchronization(namesStudents.get(5));
+        }).start();
+    }
+
+    private void printToConsoleViaSynchronization(String names) {
+        synchronized (flag) {
+            System.out.println("Студент с именем " + names + " Счетчик " + count);
+            count++;
+        }
     }
 }
