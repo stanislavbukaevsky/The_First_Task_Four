@@ -19,7 +19,7 @@ public class StudentService {
 
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
-    private Integer count = 0;
+    private int count = 0;
 
     private Object flag = new Object();
 
@@ -135,23 +135,23 @@ public class StudentService {
                 .map(user -> user.getName())
                 .collect(Collectors.toList());
 
-        printToConsoleViaSynchronization(namesStudents.get(0));
-        printToConsoleViaSynchronization(namesStudents.get(1));
+        printToConsoleViaSynchronization(namesStudents);
+        printToConsoleViaSynchronization(namesStudents);
 
         new Thread(() -> {
-            printToConsoleViaSynchronization(namesStudents.get(2));
-            printToConsoleViaSynchronization(namesStudents.get(3));
+            printToConsoleViaSynchronization(namesStudents);
+            printToConsoleViaSynchronization(namesStudents);
         }).start();
 
         new Thread(() -> {
-            printToConsoleViaSynchronization(namesStudents.get(4));
-            printToConsoleViaSynchronization(namesStudents.get(5));
+            printToConsoleViaSynchronization(namesStudents);
+            printToConsoleViaSynchronization(namesStudents);
         }).start();
     }
 
-    private void printToConsoleViaSynchronization(String names) {
+    private void printToConsoleViaSynchronization(List<String> names) {
         synchronized (flag) {
-            System.out.println("Студент с именем " + names + " Счетчик " + count);
+            System.out.println("Студент с именем " + names.get(count));
             count++;
         }
     }
